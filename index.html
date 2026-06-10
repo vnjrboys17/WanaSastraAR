@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TangkalNaonAR - WebAR Edukasi Tanaman</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8F9FA;
+        }
+        #ar-button {
+            background-color: #2A5C43;
+            border-radius: 12px;
+            padding: 10px 20px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(42, 92, 67, 0.3);
+        }
+        .btn-scale {
+            transition: all 0.2s ease;
+            opacity: 0.6;
+        }
+        .btn-scale.active {
+            opacity: 1;
+            transform: scale(1.08);
+            border: 2px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen p-0 sm:p-4">
+
+    <div class="w-full max-w-md bg-[#FAFAF9] min-h-screen sm:min-h-[850px] shadow-xl sm:rounded-3xl overflow-hidden flex flex-col justify-between relative border border-gray-100">
+        
+        <header class="px-6 py-4 flex justify-between items-center bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-gray-50">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="goToHome()">
+                <div class="w-8 h-8 rounded-full bg-[#2A5C43] flex items-center justify-center text-white">
+                    <span class="material-symbols-outlined text-lg">eco</span>
+                </div>
+                <span class="text-xl font-bold text-[#1A3024]">TangkalNaon<span class="text-[#2A5C43]">AR</span></span>
+            </div>
+            <button class="w-10 h-10 rounded-full bg-[#E8EFEA] flex items-center justify-center text-[#2A5C43]">
+                <span class="material-symbols-outlined">notifications</span>
+            </button>
+        </header>
+
+        <main id="home-view" class="px-6 flex-1 overflow-y-auto pb-8 pt-4">
+            <div class="relative rounded-2xl overflow-hidden mb-8 h-42 bg-cover bg-center flex flex-col justify-between p-5 text-white shadow-md" 
+                 style="background-image: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%), url('https://images.unsplash.com/photo-1545147986-a9d6f2103c59?q=80&w=500&auto=format&fit=crop');">
+                <div class="self-start bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-medium flex items-center gap-1 border border-white/20">
+                    <span class="material-symbols-outlined text-xs">auto_awesome</span>
+                    WebAR Aktif
+                </div>
+                <div>
+                    <h2 class="text-base font-bold leading-tight mb-1">Scan Stiker QR Tanaman,<br>Hidupkan Edukasi AR</h2>
+                    <p class="text-[10px] text-gray-200 font-light">Eksplorasi spesies pohon lokal dengan teknologi Augmented Reality langsung dari kameramu.</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center justify-center my-10">
+                <div class="w-32 h-32 rounded-full bg-emerald-700/5 flex items-center justify-center border border-emerald-700/10">
+                    <button id="scan-btn" class="w-24 h-24 rounded-3xl bg-[#2A5C43] shadow-lg shadow-emerald-900/30 flex flex-col items-center justify-center text-white gap-1 hover:bg-[#214734] transition-all transform active:scale-95">
+                        <span class="material-symbols-outlined text-3xl">qr_code_scanner</span>
+                        <span class="text-xs font-semibold tracking-wide">Scan QR</span>
+                    </button>
+                </div>
+                <h3 class="text-sm font-semibold text-gray-700 mt-4">Scan QR Tanaman</h3>
+                <p class="text-xs text-gray-400 mt-1">Tekan untuk membuka kamera scanner</p>
+            </div>
+
+            <section class="mt-8">
+                <h4 class="text-sm font-bold text-[#1A3024] mb-3">Cara Penggunaan</h4>
+                <div class="space-y-3 text-xs text-gray-600">
+                    <div class="p-3 bg-white border border-gray-100 rounded-xl flex gap-3 items-center">
+                        <span class="material-symbols-outlined text-[#2A5C43]">location_on</span>
+                        <p>Temukan stiker QR TangkalNaonAR di papan pohon.</p>
+                    </div>
+                    <div class="p-3 bg-white border border-gray-100 rounded-xl flex gap-3 items-center">
+                        <span class="material-symbols-outlined text-[#2A5C43]">qr_code_scanner</span>
+                        <p>Tekan tombol <b>Scan QR</b> lalu arahkan ke stiker.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <div id="scanner-container" class="hidden fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center p-4 sm:absolute sm:rounded-3xl">
+            <div class="w-full max-w-sm bg-white rounded-2xl overflow-hidden shadow-2xl p-4">
+                <h3 class="text-sm font-bold text-gray-800 text-center mb-3">Arahkan Kamera ke QR Code</h3>
+                <div id="reader" class="w-full rounded-xl overflow-hidden bg-gray-100"></div>
+                <button id="close-btn" class="mt-4 w-full py-2.5 bg-red-500 text-white font-medium rounded-xl text-xs hover:bg-red-600 transition-colors">
+                    Batal Tutup Kamera
+                </button>
+            </div>
+        </div>
+
+        <main id="detail-view" class="hidden flex-1 overflow-y-auto pb-8 flex flex-col">
+            <div class="w-full h-72 bg-gradient-to-b from-emerald-50 to-white relative flex items-center justify-center">
+                
+                <model-viewer id="plant-model" 
+                              src="" 
+                              ar 
+                              ar-modes="webxr scene-viewer quick-look" 
+                              camera-controls 
+                              poster="https://images.unsplash.com/photo-1545147986-a9d6f2103c59?w=300" 
+                              shadow-intensity="1" 
+                              class="w-full h-full">
+                    
+                    <div class="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-50">
+                        <button class="btn-scale w-10 h-10 rounded-xl bg-[#2A5C43] text-white font-bold flex items-center justify-center text-sm" data-phase="1" id="btn-scale-1">1</button>
+                        <button class="btn-scale w-10 h-10 rounded-xl bg-[#2A5C43] text-white font-bold flex items-center justify-center text-sm active" data-phase="2" id="btn-scale-2">2</button>
+                        <button class="btn-scale w-10 h-10 rounded-xl bg-[#2A5C43] text-white font-bold flex items-center justify-center text-sm" data-phase="3" id="btn-scale-3">3</button>
+                    </div>
+
+                    <button slot="ar-button" id="ar-button" class="absolute bottom-4 left-1/2 -translate-x-1/2">
+                        <span class="material-symbols-outlined">view_in_ar</span>
+                        Lihat di Sekitarmu (AR)
+                    </button>
+                </model-viewer>
+
+                <button onclick="goToHome()" class="absolute top-4 left-4 w-9 h-9 rounded-full bg-white/80 backdrop-blur-md shadow flex items-center justify-center text-gray-700">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span>
+                </button>
+            </div>
+
+            <div class="px-6 pt-4 flex-1">
+                <span class="px-2.5 py-1 bg-emerald-100 text-[#2A5C43] text-[10px] font-bold rounded-full uppercase tracking-wider" id="plant-family">Family</span>
+                <h2 class="text-2xl font-bold text-[#1A3024] mt-2" id="plant-name">Nama Tanaman</h2>
+                <p class="text-xs italic text-gray-400 font-medium" id="plant-latin">Nama Latin Sp.</p>
+                
+                <div class="mt-4 border-t border-gray-100 pt-4">
+                    <h4 class="text-xs font-bold text-gray-700 mb-1">Deskripsi Tanaman</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed" id="plant-desc">
+                        Memuat data deskripsi tanaman...
+                    </p>
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <script>
+        const scanBtn = document.getElementById('scan-btn');
+        const closeBtn = document.getElementById('close-btn');
+        const scannerContainer = document.getElementById('scanner-container');
+        
+        const homeView = document.getElementById('home-view');
+        const detailView = document.getElementById('detail-view');
+        
+        // Buat instance global untuk menampung kamera agar tidak terjadi re-binding error
+        let html5QrCode = null;
+        let currentPlantId = ""; 
+
+        // 1. DATABASE LOKAL
+        const plantDatabase = {
+            "palm": {
+                name: "Pohon Palem Raja",
+                latin: "Roystonea regia",
+                family: "Arecaceae",
+                desc: "Palem raja adalah tumbuhan berkeping satu (monokotil) yang termasuk dalam keluarga Arecaceae. Pohon ini memiliki batang lurus, kokoh, dan tidak bercabang.",
+                models: {
+                    "1": "palm_tunas.glb",    
+                    "2": "palm_remaja.glb",   
+                    "3": "palm_berbuah.glb"  
+                }
+            },
+            "mangga": {
+                name: "Pohon Mangga",
+                latin: "Mangifera indica",
+                family: "Anacardiaceae",
+                desc: "Pohon mangga adalah tanaman berkayu dengan tajuk yang rimbun dan daun lebat. Sangat populer ditanam di pekarangan rumah sebagai pohon peneduh.",
+                models: {
+                    "1": "mangga_tunas.glb",   
+                    "2": "mango_tree_fix.glb", 
+                    "3": "mangga_berbuah.glb" 
+                }
+            }
+        };
+
+        // 2. TAMPILKAN DETAIL & CATAT KE DALAM RIWAYAT
+        function showPlantDetail(id, pushToHistory = true) {
+            const plant = plantDatabase[id];
+            if (!plant) {
+                alert("Data tanaman tidak ditemukan!"); return;
+            }
+
+            currentPlantId = id; 
+            document.getElementById('plant-name').innerText = plant.name;
+            document.getElementById('plant-latin').innerText = plant.latin;
+            document.getElementById('plant-family').innerText = plant.family;
+            document.getElementById('plant-desc').innerText = plant.desc;
+            
+            const modelViewer = document.getElementById('plant-model');
+            modelViewer.setAttribute('src', plant.models["2"]); 
+
+            const scaleButtons = document.querySelectorAll('.btn-scale');
+            scaleButtons.forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-scale-2').classList.add('active');
+
+            if (pushToHistory) {
+                window.history.pushState({ view: 'detail', plantId: id }, '', '?plant=' + id);
+            }
+
+            homeView.classList.add('hidden');
+            detailView.classList.remove('hidden');
+        }
+
+        // 3. FUNGSI SINKRONISASI TOMBOL 3D DAN PENAHAN BUG KELUAR AR
+        document.addEventListener("DOMContentLoaded", () => {
+            const modelViewer = document.getElementById('plant-model');
+            const scaleButtons = document.querySelectorAll('.btn-scale');
+
+            scaleButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const selectedPhase = e.target.getAttribute('data-phase');
+                    const activePlant = plantDatabase[currentPlantId];
+                    if (activePlant && activePlant.models[selectedPhase]) {
+                        modelViewer.setAttribute('src', activePlant.models[selectedPhase]);
+                    }
+                    scaleButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                });
+            });
+
+            // Solusi penahan agar tombol back fisik HP saat mode AR aktif tidak mengeluarkan user dari browser
+            modelViewer.addEventListener('ar-status', (event) => {
+                if (event.detail.status === 'session-started') {
+                    window.history.pushState({ view: 'ar-mode' }, '', '#ar-mode-aktif');
+                } else if (event.detail.status === 'not-presenting') {
+                    if (window.history.state && window.history.state.view === 'ar-mode') {
+                        window.history.back();
+                    }
+                }
+            });
+        });
+
+        // Tombol Back UI Web
+        function goToHome() {
+            if (window.history.state && window.history.state.view === 'detail') {
+                window.history.back();
+            } else {
+                detailView.classList.add('hidden');
+                homeView.classList.remove('hidden');
+            }
+        }
+
+        // 4. PENANGANAN PERPINDAHAN RIWAYAT (BACK BUTTON LISTENER)
+        window.addEventListener('popstate', (event) => {
+            if (event.state && event.state.view === 'ar-mode') return;
+
+            if (event.state && event.state.view === 'detail') {
+                showPlantDetail(event.state.plantId, false);
+            } else {
+                detailView.classList.add('hidden');
+                homeView.classList.remove('hidden');
+            }
+        });
+
+        // 5. LOGIKA SAKELAR KAMERA SCANNER QR CODE (ANTI-CRASH)
+        function onScanSuccess(decodedText) {
+            stopScanner();
+            try {
+                if (decodedText.includes('?plant=')) {
+                    const urlParams = new URLSearchParams(decodedText.split('?')[1]);
+                    showPlantDetail(urlParams.get('plant'));
+                } else if (plantDatabase[decodedText]) {
+                    showPlantDetail(decodedText);
+                } else {
+                    alert("QR Code terbaca: " + decodedText + " (Tidak terdaftar)");
+                }
+            } catch (e) {
+                alert("Gagal memproses QR.");
+            }
+        }
+
+        scanBtn.addEventListener('click', () => {
+            // Validasi protokol keamanan SSL/HTTPS
+            if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+                alert("WebAR membutuhkan protokol HTTPS. Harap unggah halaman ini ke GitHub Pages."); 
+                return;
+            }
+
+            // TAMPILKAN CONTAINER DULUAN (Wajib agar library bisa mendeteksi rasio dimensi kotak #reader)
+            scannerContainer.classList.remove('hidden');
+            
+            // Buat objek baru HANYA jika belum pernah dibentuk sebelumnya
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("reader");
+            }
+            
+            // Jaga-jaga jika kamera sudah dalam kondisi aktif streaming
+            if (html5QrCode.isScanning) return;
+
+            html5QrCode.start(
+                { facingMode: "environment" }, 
+                { fps: 15, qrbox: { width: 250, height: 250 } }, 
+                onScanSuccess
+            ).catch((err) => {
+                alert("Gagal akses kamera. Pastikan izin kamera diizinkan browser.\n\nDetail Error: " + err);
+                stopScanner();
+            });
+        });
+
+        function stopScanner() {
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.stop().then(() => {
+                    scannerContainer.classList.add('hidden');
+                }).catch((err) => {
+                    console.error("Gagal menghentikan aliran kamera: ", err);
+                    scannerContainer.classList.add('hidden');
+                });
+            } else {
+                scannerContainer.classList.add('hidden');
+            }
+        }
+        closeBtn.addEventListener('click', stopScanner);
+
+        // 6. INSIALISASI DEEP LINKING (SPA HISTORY BASE)
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const plantId = urlParams.get('plant');
+            
+            if (plantId && plantDatabase[plantId]) {
+                window.history.replaceState({ view: 'home' }, '', window.location.pathname);
+                window.history.pushState({ view: 'detail', plantId: plantId }, '', '?plant=' + plantId);
+                showPlantDetail(plantId, false);
+            } else {
+                window.history.replaceState({ view: 'home' }, '', window.location.pathname);
+            }
+        });
+    </script>
+</body>
+</html>
