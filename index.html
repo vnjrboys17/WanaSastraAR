@@ -428,8 +428,8 @@
     // INISIALISASI SAAT HALAMAN DIBUKA (TERMASUK DEEP LINKING)
     document.addEventListener("DOMContentLoaded", () => {
         // Trik Reset Manual (Hapus // di dua baris bawah ini jika ingin reset game ke awal)
-        // localStorage.clear();
-        // location.reload();
+         localStorage.clear();
+         location.reload();
 
         const modelViewer = document.getElementById('plant-model');
         const scaleButtons = document.querySelectorAll('.btn-scale');
