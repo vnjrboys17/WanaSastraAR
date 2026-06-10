@@ -17,8 +17,6 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #f2f5f3;
     }
-    
-    /* Menyembunyikan scrollbar bawaan browser */
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
@@ -142,6 +140,27 @@
         </div>
       </div>
 
+      <div class="space-y-3">
+        <div class="flex justify-between items-center">
+          <h4 class="text-xs font-bold text-gray-800 tracking-wider uppercase">Tantangan Ekstra</h4>
+          <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+        </div>
+        
+        <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex justify-between items-center gap-4 hover:border-emerald-200 transition-colors">
+          <div class="flex gap-3 items-center min-w-0">
+            <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100">
+              <span class="material-symbols-outlined text-xl">quiz</span>
+            </div>
+            <div class="min-w-0">
+              <h5 class="text-xs font-bold text-gray-700 truncate">Asah Otak: Trivia Hijau</h5>
+              <p class="text-[10px] text-gray-400 mt-0.5 truncate">Uji wawasanmu tentang botani & dapatkan +30 XP</p>
+            </div>
+          </div>
+          <button class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 active:scale-95 text-white text-[10px] font-bold rounded-lg shadow-md tracking-wider transition-all shrink-0">
+            MAIN
+          </button>
+        </div>
+      </div>
     </main>
 
     <main id="tanamandex-view" class="view-section hidden flex-1 overflow-y-auto px-6 py-5 space-y-4 no-scrollbar z-10">
@@ -248,7 +267,7 @@
     let html5QrCode = null;
     let currentPlantId = ""; 
 
-    // 1. DATA MASTER TANAMAN & FILE 3D
+    // DATA MASTER
     const plantDatabase = {
         "palm": {
             name: "Pohon Palem Raja",
@@ -257,7 +276,7 @@
             desc: "Palem raja adalah tumbuhan monokotil kokoh yang ideal untuk dekorasi jalan raya dan taman hijau kampus.",
             models: { "1": "palm_tunas.glb", "2": "tropical_palm_tree.glb", "3": "palm_berbuah.glb" }
         },
-        "mangga": { // <-- DIPERBAIKI (sebelumnya "mango")
+        "mangga": { 
             name: "Pohon Mangga",
             latin: "Mangifera indica",
             family: "Anacardiaceae",
@@ -266,14 +285,14 @@
         }
     };
 
-    // 2. SISTEM PENYIMPANAN & RESET AWAL
-    // Hapus memori lama jika ada agar semua kembali terkunci di awal percobaan
+    // LOCAL STORAGE INIT
     if (!localStorage.getItem('userXP') || !localStorage.getItem('unlockedPlants')) {
-        localStorage.setItem('userXP', '0'); // XP awal 0
+        localStorage.setItem('userXP', '0'); 
         localStorage.setItem('userLevel', 'Ambassador Tunas');
-        localStorage.setItem('unlockedPlants', JSON.stringify([])); // Kosongkan daftar tanaman (Semua Terkunci)
+        localStorage.setItem('unlockedPlants', JSON.stringify([])); 
     }
 
+    // FUNGSI UPDATE UI GAMIFIKASI
     function syncGamificationUI() {
         const xp = parseInt(localStorage.getItem('userXP'));
         const level = localStorage.getItem('userLevel');
@@ -284,7 +303,6 @@
         document.getElementById('user-level').innerText = level;
         document.getElementById('dex-count').innerText = `${unlocked.length} / 4 DITEMUKAN`;
 
-        // LOGIKA BUKA KUNCI MANGGA
         if (unlocked.includes('mangga')) {
             const slotMangga = document.getElementById('slot-mangga');
             if(slotMangga) {
@@ -310,7 +328,6 @@
             }
         }
 
-        // LOGIKA BUKA KUNCI PALEM
         if (unlocked.includes('palm')) {
             const slotPalm = document.getElementById('slot-palm');
             if(slotPalm) {
@@ -337,6 +354,7 @@
         }
     }
 
+    // FUNGSI REWARD
     function rewardNewScan(plantId) {
         let unlocked = JSON.parse(localStorage.getItem('unlockedPlants'));
         if (!unlocked.includes(plantId)) {
@@ -350,7 +368,7 @@
         }
     }
 
-    // 3. FUNGSI KLIK MENU NAVIGASI BAWAH
+    // SWITCH TAB MENU BAWAH
     function switchTab(tabId) {
         document.querySelectorAll('.view-section').forEach(view => view.classList.add('hidden'));
         document.querySelectorAll('.nav-item').forEach(nav => {
@@ -376,10 +394,14 @@
         }
     }
 
-    // 4. MEMBUKA LAYAR DETAIL
+    // TAMPILKAN DETAIL & 3D MODEL
     function showPlantDetail(id, pushToHistory = true) {
         const plant = plantDatabase[id];
-        if (!plant) return;
+        if (!plant) {
+            alert("Data tanaman tidak ditemukan!");
+            return;
+        }
+        
         currentPlantId = id;
         document.getElementById('plant-name').innerText = plant.name;
         document.getElementById('plant-latin').innerText = plant.latin;
@@ -403,10 +425,9 @@
         else { switchTab('home'); }
     }
 
-    // 5. EVENT INITIALIZER
+    // INISIALISASI SAAT HALAMAN DIBUKA (TERMASUK DEEP LINKING)
     document.addEventListener("DOMContentLoaded", () => {
-        // Trik Reset Manual: Jika Anda ingin memaksakan ulang dari 0 saat testing,
-        // Hapus komentar pada 2 baris di bawah ini sekali saja lalu refresh:
+        // Trik Reset Manual (Hapus // di dua baris bawah ini jika ingin reset game ke awal)
         // localStorage.clear();
         // location.reload();
 
@@ -429,9 +450,25 @@
             if (event.detail.status === 'session-started') { window.history.pushState({ view: 'ar-mode' }, '', '#ar-mode-aktif'); } 
             else if (event.detail.status === 'not-presenting') { if (window.history.state && window.history.state.view === 'ar-mode') window.history.back(); }
         });
+        
         syncGamificationUI();
+
+        // DEEP LINKING CHECK (Membaca parameter di URL saat pertama kali dibuka)
+        const urlParams = new URLSearchParams(window.location.search);
+        const plantId = urlParams.get('plant');
+        
+        if (plantId && plantDatabase[plantId]) {
+            // Jika ada parameter ?plant= di URL, catat penemuan dan langsung buka
+            rewardNewScan(plantId);
+            window.history.replaceState({ view: 'home' }, '', window.location.pathname);
+            window.history.pushState({ view: 'detail', plantId: plantId }, '', '?plant=' + plantId);
+            showPlantDetail(plantId, false);
+        } else {
+            window.history.replaceState({ view: 'home' }, '', window.location.pathname);
+        }
     });
 
+    // LISTENER TOMBOL BACK HP
     window.addEventListener('popstate', (event) => {
         if (event.state && event.state.view === 'ar-mode') return;
         if (event.state && event.state.view === 'detail') { showPlantDetail(event.state.plantId, false); } 
@@ -440,12 +477,15 @@
         else { switchTab('home'); }
     });
 
-    // 6. MESIN KAMERA SCANNER
+    // KAMERA SCANNER
     function onScanSuccess(decodedText) {
         stopScanner();
         try {
             let id = decodedText.includes('?plant=') ? new URLSearchParams(decodedText.split('?')[1]).get('plant') : decodedText;
-            if (plantDatabase[id]) { rewardNewScan(id); showPlantDetail(id); } 
+            if (plantDatabase[id]) { 
+                rewardNewScan(id); 
+                showPlantDetail(id); 
+            } 
             else { alert("QR Code tidak dikenali oleh sistem TangkalNaonAR."); }
         } catch (e) { alert("Gagal membaca format QR Code."); }
     }
