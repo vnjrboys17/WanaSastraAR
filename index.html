@@ -61,10 +61,10 @@
             <span class="material-symbols-outlined text-xs text-amber-500">star</span> 
             Poin Pengalaman (XP)
           </span>
-          <span id="xp-text" class="tracking-wider text-emerald-800 font-extrabold">240 / 500 XP</span>
+          <span id="xp-text" class="tracking-wider text-emerald-800 font-extrabold">0 / 500 XP</span>
         </div>
         <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden shadow-inner p-[1px]">
-          <div id="xp-bar" class="h-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 rounded-full transition-all duration-700 shadow-sm" style="width: 48%"></div>
+          <div id="xp-bar" class="h-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 rounded-full transition-all duration-700 shadow-sm" style="width: 0%"></div>
         </div>
       </div>
     </header>
@@ -107,19 +107,19 @@
             <p class="text-[10px] text-gray-400 mt-0.5">Daftar flora yang berhasil kamu taklukkan</p>
           </div>
           <span id="dex-count" class="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-[10px] font-extrabold rounded-full border border-emerald-100/80">
-            1 / 4 DITEMUKAN
+            0 / 4 DITEMUKAN
           </span>
         </div>
 
         <div class="grid grid-cols-4 gap-3 pt-1">
-          <div onclick="showPlantDetail('palm')" class="flex flex-col items-center gap-1.5 group cursor-pointer">
-            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-400 shadow-sm flex items-center justify-center text-emerald-700 group-hover:scale-105 transition-transform">
-              <span class="material-symbols-outlined text-2xl">potted_plant</span>
+          <div id="slot-palm" onclick="alert('Tanaman ini terkunci! Temukan QR-nya untuk membuka.')" class="flex flex-col items-center gap-1.5 opacity-50 cursor-pointer">
+            <div id="icon-palm" class="w-12 h-12 rounded-xl bg-gray-100 border border-dashed border-gray-300 flex items-center justify-center text-gray-400 shadow-inner">
+              <span class="material-symbols-outlined text-base">lock</span>
             </div>
-            <span class="text-[9px] font-bold text-gray-600 truncate w-full text-center">Palem Raja</span>
+            <span id="text-palm" class="text-[9px] font-medium text-gray-400 text-center truncate w-full">Belum Ada</span>
           </div>
 
-          <div id="slot-mangga" class="flex flex-col items-center gap-1.5 opacity-50">
+          <div id="slot-mangga" onclick="alert('Tanaman ini terkunci! Temukan QR-nya untuk membuka.')" class="flex flex-col items-center gap-1.5 opacity-50 cursor-pointer">
             <div id="icon-mangga" class="w-12 h-12 rounded-xl bg-gray-100 border border-dashed border-gray-300 flex items-center justify-center text-gray-400 shadow-inner">
               <span class="material-symbols-outlined text-base">lock</span>
             </div>
@@ -142,27 +142,6 @@
         </div>
       </div>
 
-      <div class="space-y-3">
-        <div class="flex justify-between items-center">
-          <h4 class="text-xs font-bold text-gray-800 tracking-wider uppercase">Tantangan Ekstra</h4>
-          <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-        </div>
-        
-        <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex justify-between items-center gap-4 hover:border-emerald-200 transition-colors">
-          <div class="flex gap-3 items-center min-w-0">
-            <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100">
-              <span class="material-symbols-outlined text-xl">quiz</span>
-            </div>
-            <div class="min-w-0">
-              <h5 class="text-xs font-bold text-gray-700 truncate">Asah Otak: Trivia Hijau</h5>
-              <p class="text-[10px] text-gray-400 mt-0.5 truncate">Uji wawasanmu tentang botani & dapatkan +30 XP</p>
-            </div>
-          </div>
-          <button class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 active:scale-95 text-white text-[10px] font-bold rounded-lg shadow-md tracking-wider transition-all shrink-0">
-            MAIN
-          </button>
-        </div>
-      </div>
     </main>
 
     <main id="tanamandex-view" class="view-section hidden flex-1 overflow-y-auto px-6 py-5 space-y-4 no-scrollbar z-10">
@@ -170,13 +149,13 @@
       <p class="text-xs text-gray-400 -mt-2">Temukan seluruh QR tanaman di lapangan untuk membuka ensiklopedia ini.</p>
 
       <div class="grid grid-cols-2 gap-4 pt-2">
-        <div onclick="showPlantDetail('palm')" class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center text-center gap-2 cursor-pointer border-emerald-200">
-          <span class="material-symbols-outlined text-4xl text-emerald-600">potted_plant</span>
-          <h4 class="text-xs font-bold text-gray-800">Pohon Palem Raja</h4>
-          <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[8px] font-bold rounded-full">TERBUKA</span>
+        <div id="card-dex-palm" onclick="alert('Tanaman ini terkunci! Temukan QR-nya untuk membuka.')" class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center text-center gap-2 opacity-50 cursor-pointer">
+          <span id="card-icon-palm" class="material-symbols-outlined text-4xl text-gray-400">lock</span>
+          <h4 id="card-title-palm" class="text-xs font-bold text-gray-400">???</h4>
+          <span id="card-badge-palm" class="px-2 py-0.5 bg-gray-100 text-gray-500 text-[8px] font-bold rounded-full">TERKUNCI</span>
         </div>
         
-        <div id="card-dex-mangga" class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center text-center gap-2 opacity-50">
+        <div id="card-dex-mangga" onclick="alert('Tanaman ini terkunci! Temukan QR-nya untuk membuka.')" class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center text-center gap-2 opacity-50 cursor-pointer">
           <span id="card-icon-mangga" class="material-symbols-outlined text-4xl text-gray-400">lock</span>
           <h4 id="card-title-mangga" class="text-xs font-bold text-gray-400">???</h4>
           <span id="card-badge-mangga" class="px-2 py-0.5 bg-gray-100 text-gray-500 text-[8px] font-bold rounded-full">TERKUNCI</span>
@@ -230,13 +209,10 @@
     <div id="scanner-container" class="hidden fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center p-4 sm:absolute sm:rounded-3xl">
       <div class="w-full max-w-sm bg-white rounded-2xl overflow-hidden shadow-2xl p-4">
           <h3 class="text-sm font-bold text-gray-800 text-center mb-3">Arahkan Kamera ke QR Code</h3>
-          
           <div id="reader" class="w-full rounded-xl overflow-hidden bg-gray-100"></div>
-          
           <p class="text-[11px] text-center text-emerald-700 font-semibold mt-3 bg-emerald-50 py-1.5 px-3 rounded-lg border border-emerald-100 animate-pulse">
               📷 Dekatkan kamera pada QR Code tanaman
           </p>
-          
           <button id="close-btn" class="mt-4 w-full py-2.5 bg-red-500 text-white font-medium rounded-xl text-xs hover:bg-red-600 transition-colors">
               Batal Tutup Kamera
           </button>
@@ -281,7 +257,7 @@
             desc: "Palem raja adalah tumbuhan monokotil kokoh yang ideal untuk dekorasi jalan raya dan taman hijau kampus.",
             models: { "1": "palm_tunas.glb", "2": "tropical_palm_tree.glb", "3": "palm_berbuah.glb" }
         },
-        "mango": {
+        "mangga": { // <-- DIPERBAIKI (sebelumnya "mango")
             name: "Pohon Mangga",
             latin: "Mangifera indica",
             family: "Anacardiaceae",
@@ -290,45 +266,25 @@
         }
     };
 
-    // 2. SISTEM PENYIMPANAN LEVEL & KOLEKSI
-    if (!localStorage.getItem('userXP')) {
-            localStorage.setItem('userXP', '0'); // Reset XP ke 0
-            localStorage.setItem('userLevel', 'Ambassador Tunas');
-            localStorage.setItem('unlockedPlants', JSON.stringify([])); // Kosongkan, berarti semua terkunci
-        }
+    // 2. SISTEM PENYIMPANAN & RESET AWAL
+    // Hapus memori lama jika ada agar semua kembali terkunci di awal percobaan
+    if (!localStorage.getItem('userXP') || !localStorage.getItem('unlockedPlants')) {
+        localStorage.setItem('userXP', '0'); // XP awal 0
+        localStorage.setItem('userLevel', 'Ambassador Tunas');
+        localStorage.setItem('unlockedPlants', JSON.stringify([])); // Kosongkan daftar tanaman (Semua Terkunci)
     }
 
     function syncGamificationUI() {
-            const xp = parseInt(localStorage.getItem('userXP'));
-            const level = localStorage.getItem('userLevel');
-            const unlocked = JSON.parse(localStorage.getItem('unlockedPlants'));
+        const xp = parseInt(localStorage.getItem('userXP'));
+        const level = localStorage.getItem('userLevel');
+        const unlocked = JSON.parse(localStorage.getItem('unlockedPlants'));
 
-            document.getElementById('xp-text').innerText = `${xp} / 500 XP`;
-            document.getElementById('xp-bar').style.width = `${(xp / 500) * 100}%`;
-            document.getElementById('user-level').innerText = level;
-            document.getElementById('dex-count').innerText = `${unlocked.length} / 4 DITEMUKAN`;
+        document.getElementById('xp-text').innerText = `${xp} / 500 XP`;
+        document.getElementById('xp-bar').style.width = `${(xp / 500) * 100}%`;
+        document.getElementById('user-level').innerText = level;
+        document.getElementById('dex-count').innerText = `${unlocked.length} / 4 DITEMUKAN`;
 
-            // LOGIKA UNLOCK MANGGA
-            const slotMangga = document.getElementById('slot-mangga');
-            const cardDexMangga = document.getElementById('card-dex-mangga');
-
-            if (unlocked.includes('mangga')) {
-                // ... (biarkan kode unlock mangga yang sudah ada di sini) ...
-            } else {
-                // KUNCI MANGGA (Opsional: Pastikan style terkunci)
-                slotMangga.classList.add('opacity-50');
-                slotMangga.onclick = () => alert("Tanaman ini terkunci! Temukan QR-nya untuk membuka.");
-            }
-
-            // LOGIKA UNLOCK PALM (Baru ditambahkan)
-            if (unlocked.includes('palm')) {
-                // Buka kunci visual untuk palm
-            } else {
-                // KUNCI PALM
-                // Tambahkan kode untuk mengunci slot palm di sini jika ingin palm juga bisa terkunci
-            }
-        }
-
+        // LOGIKA BUKA KUNCI MANGGA
         if (unlocked.includes('mangga')) {
             const slotMangga = document.getElementById('slot-mangga');
             if(slotMangga) {
@@ -343,6 +299,7 @@
             const cardDexMangga = document.getElementById('card-dex-mangga');
             if(cardDexMangga) {
                 cardDexMangga.classList.remove('opacity-50');
+                cardDexMangga.classList.add('border-emerald-200');
                 cardDexMangga.onclick = () => showPlantDetail('mangga');
                 document.getElementById('card-icon-mangga').className = "material-symbols-outlined text-4xl text-emerald-600";
                 document.getElementById('card-icon-mangga').innerText = "potted_plant";
@@ -350,6 +307,32 @@
                 document.getElementById('card-title-mangga').innerText = "Pohon Mangga";
                 document.getElementById('card-badge-mangga').className = "px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[8px] font-bold rounded-full";
                 document.getElementById('card-badge-mangga').innerText = "TERBUKA";
+            }
+        }
+
+        // LOGIKA BUKA KUNCI PALEM
+        if (unlocked.includes('palm')) {
+            const slotPalm = document.getElementById('slot-palm');
+            if(slotPalm) {
+                slotPalm.classList.remove('opacity-50');
+                slotPalm.onclick = () => showPlantDetail('palm');
+                document.getElementById('icon-palm').innerHTML = '<span class="material-symbols-outlined text-2xl text-emerald-700">potted_plant</span>';
+                document.getElementById('icon-palm').className = "w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-400 shadow-sm flex items-center justify-center";
+                document.getElementById('text-palm').innerText = "Palem Raja";
+                document.getElementById('text-palm').className = "text-[9px] font-bold text-gray-600 text-center truncate w-full";
+            }
+
+            const cardDexPalm = document.getElementById('card-dex-palm');
+            if(cardDexPalm) {
+                cardDexPalm.classList.remove('opacity-50');
+                cardDexPalm.classList.add('border-emerald-200');
+                cardDexPalm.onclick = () => showPlantDetail('palm');
+                document.getElementById('card-icon-palm').className = "material-symbols-outlined text-4xl text-emerald-600";
+                document.getElementById('card-icon-palm').innerText = "potted_plant";
+                document.getElementById('card-title-palm').className = "text-xs font-bold text-gray-800";
+                document.getElementById('card-title-palm').innerText = "Pohon Palem Raja";
+                document.getElementById('card-badge-palm').className = "px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[8px] font-bold rounded-full";
+                document.getElementById('card-badge-palm').innerText = "TERBUKA";
             }
         }
     }
@@ -367,18 +350,14 @@
         }
     }
 
-    // 3. FUNGSI KLIK MENU NAVIGASI BAWAH (SUDAH DIPERBAIKI)
+    // 3. FUNGSI KLIK MENU NAVIGASI BAWAH
     function switchTab(tabId) {
-        // Sembunyikan semua section
         document.querySelectorAll('.view-section').forEach(view => view.classList.add('hidden'));
-        
-        // Reset warna semua tombol nav
         document.querySelectorAll('.nav-item').forEach(nav => {
             nav.classList.remove('text-emerald-600', 'font-bold', 'transform', 'scale-105');
             nav.classList.add('text-gray-400');
         });
 
-        // Tampilkan halaman sesuai tab yang dipilih
         if (tabId === 'home') {
             homeView.classList.remove('hidden');
             document.getElementById('nav-home').classList.add('text-emerald-600', 'font-bold', 'transform', 'scale-105');
@@ -426,6 +405,11 @@
 
     // 5. EVENT INITIALIZER
     document.addEventListener("DOMContentLoaded", () => {
+        // Trik Reset Manual: Jika Anda ingin memaksakan ulang dari 0 saat testing,
+        // Hapus komentar pada 2 baris di bawah ini sekali saja lalu refresh:
+        // localStorage.clear();
+        // location.reload();
+
         const modelViewer = document.getElementById('plant-model');
         const scaleButtons = document.querySelectorAll('.btn-scale');
 
