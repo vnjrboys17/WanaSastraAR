@@ -245,6 +245,197 @@
     </nav>
 
   </div>
+<script>
+        const scanBtn = document.getElementById('main-scan-btn');
+        const closeBtn = document.getElementById('close-btn');
+        const scannerContainer = document.getElementById('scanner-container');
+        
+        const homeView = document.getElementById('home-view');
+        const tanamandexView = document.getElementById('tanamandex-view');
+        const detailView = document.getElementById('detail-view');
+        
+        let html5QrCode = null;
+        let currentPlantId = ""; 
 
+        // 1. DATA MASTER TANAMAN & FILE 3D
+        const plantDatabase = {
+            "palm": {
+                name: "Pohon Palem Raja",
+                latin: "Roystonea regia",
+                family: "Arecaceae",
+                desc: "Palem raja adalah tumbuhan monokotil kokoh yang ideal untuk dekorasi jalan raya dan taman hijau kampus.",
+                models: { "1": "palm_tunas.glb", "2": "palm_remaja.glb", "3": "palm_berbuah.glb" }
+            },
+            "mangga": {
+                name: "Pohon Mangga",
+                latin: "Mangifera indica",
+                family: "Anacardiaceae",
+                desc: "Pohon mangga adalah tanaman peneduh rindang yang sangat populer ditanam di pekarangan lingkungan tropis.",
+                models: { "1": "mangga_tunas.glb", "2": "mango_tree_fix.glb", "3": "mangga_berbuah.glb" }
+            }
+        };
+
+        // 2. SISTEM PENYIMPANAN LEVEL & KOLEKSI (LOCALSTORAGE)
+        if (!localStorage.getItem('userXP')) {
+            localStorage.setItem('userXP', '240');
+            localStorage.setItem('userLevel', 'Ambassador Tunas');
+            localStorage.setItem('unlockedPlants', JSON.stringify(['palm']));
+        }
+
+        function syncGamificationUI() {
+            const xp = parseInt(localStorage.getItem('userXP'));
+            const level = localStorage.getItem('userLevel');
+            const unlocked = JSON.parse(localStorage.getItem('unlockedPlants'));
+
+            document.getElementById('xp-text').innerText = `${xp} / 500 XP`;
+            document.getElementById('xp-bar').style.width = `${(xp / 500) * 100}%`;
+            document.getElementById('user-level').innerText = level;
+            document.getElementById('dex-count').innerText = `${unlocked.length} / 4 DITEMUKAN`;
+
+            // Buka gembok Mangga jika sudah pernah discan
+            if (unlocked.includes('mangga')) {
+                const slotMangga = document.getElementById('slot-mangga');
+                if(slotMangga) {
+                    slotMangga.classList.remove('opacity-50');
+                    slotMangga.onclick = () => showPlantDetail('mangga');
+                    document.getElementById('icon-mangga').innerHTML = '<span class="material-symbols-outlined text-2xl text-emerald-700">potted_plant</span>';
+                    document.getElementById('icon-mangga').className = "w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-400 shadow-sm flex items-center justify-center";
+                    document.getElementById('text-mangga').innerText = "Pohon Mangga";
+                    document.getElementById('text-mangga').className = "text-[9px] font-bold text-gray-600 text-center truncate w-full";
+                }
+
+                const cardDexMangga = document.getElementById('card-dex-mangga');
+                if(cardDexMangga) {
+                    cardDexMangga.classList.remove('opacity-50');
+                    cardDexMangga.onclick = () => showPlantDetail('mangga');
+                    document.getElementById('card-icon-mangga').className = "material-symbols-outlined text-4xl text-emerald-600";
+                    document.getElementById('card-icon-mangga').innerText = "potted_plant";
+                    document.getElementById('card-title-mangga').className = "text-xs font-bold text-gray-800";
+                    document.getElementById('card-title-mangga').innerText = "Pohon Mangga";
+                    document.getElementById('card-badge-mangga').className = "px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[8px] font-bold rounded-full";
+                    document.getElementById('card-badge-mangga').innerText = "TERBUKA";
+                }
+            }
+        }
+
+        function rewardNewScan(plantId) {
+            let unlocked = JSON.parse(localStorage.getItem('unlockedPlants'));
+            if (!unlocked.includes(plantId)) {
+                unlocked.push(plantId);
+                localStorage.setItem('unlockedPlants', JSON.stringify(unlocked));
+                let currentXP = parseInt(localStorage.getItem('userXP')) + 100;
+                if (currentXP >= 500) { currentXP = 500; localStorage.setItem('userLevel', 'Mahaguru Botani'); }
+                localStorage.setItem('userXP', currentXP.toString());
+                alert(`🎉 Hebat! Tanaman baru ditemukan! Kamu naik level & dapat +100 XP.`);
+                syncGamificationUI();
+            }
+        }
+
+        // 3. FUNGSI KLIK MENU NAVIGASI BAWAH
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(view => view.classList.add('hidden'));
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.classList.remove('text-emerald-600', 'font-bold', 'transform', 'scale-105');
+                nav.classList.add('text-gray-400');
+            });
+
+            if (tabId === 'home') {
+                homeView.classList.remove('hidden');
+                document.getElementById('nav-home').classList.add('text-emerald-600', 'font-bold', 'transform', 'scale-105');
+                document.getElementById('nav-home').classList.remove('text-gray-400');
+                window.history.pushState({ view: 'home' }, '', window.location.pathname);
+            } else if (tabId === 'tanamandex') {
+                tanamandexView.classList.remove('hidden');
+                document.getElementById('nav-dex').classList.add('text-emerald-600', 'font-bold', 'transform', 'scale-105');
+                document.getElementById('nav-dex').classList.remove('text-gray-400');
+                window.history.pushState({ view: 'tanamandex' }, '', '?tab=tanamandex');
+            }
+        }
+
+        // 4. MEMBUKA LAYAR DETAIL 3D & AR
+        function showPlantDetail(id, pushToHistory = true) {
+            const plant = plantDatabase[id];
+            if (!plant) return;
+            currentPlantId = id;
+            document.getElementById('plant-name').innerText = plant.name;
+            document.getElementById('plant-latin').innerText = plant.latin;
+            document.getElementById('plant-family').innerText = plant.family;
+            document.getElementById('plant-desc').innerText = plant.desc;
+            
+            const modelViewer = document.getElementById('plant-model');
+            modelViewer.setAttribute('src', plant.models["2"]); 
+
+            const scaleButtons = document.querySelectorAll('.btn-scale');
+            scaleButtons.forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-scale-2').classList.add('active');
+
+            if (pushToHistory) { window.history.pushState({ view: 'detail', plantId: id }, '', '?plant=' + id); }
+            document.querySelectorAll('.view-section').forEach(view => view.classList.add('hidden'));
+            detailView.classList.remove('hidden');
+        }
+
+        function goToHome() {
+            if (window.history.state && window.history.state.view === 'detail') { window.history.back(); } 
+            else { switchTab('home'); }
+        }
+
+        // 5. MENGHIDUPKAN TOMBOL FASE PERTUMBUHAN 1, 2, 3
+        document.addEventListener("DOMContentLoaded", () => {
+            const modelViewer = document.getElementById('plant-model');
+            const scaleButtons = document.querySelectorAll('.btn-scale');
+
+            scaleButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const selectedPhase = e.target.getAttribute('data-phase');
+                    const activePlant = plantDatabase[currentPlantId];
+                    if (activePlant && activePlant.models[selectedPhase]) {
+                        modelViewer.setAttribute('src', activePlant.models[selectedPhase]);
+                    }
+                    scaleButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                });
+            });
+
+            modelViewer.addEventListener('ar-status', (event) => {
+                if (event.detail.status === 'session-started') { window.history.pushState({ view: 'ar-mode' }, '', '#ar-mode-aktif'); } 
+                else if (event.detail.status === 'not-presenting') { if (window.history.state && window.history.state.view === 'ar-mode') window.history.back(); }
+            });
+            syncGamificationUI();
+        });
+
+        window.addEventListener('popstate', (event) => {
+            if (event.state && event.state.view === 'ar-mode') return;
+            if (event.state && event.state.view === 'detail') { showPlantDetail(event.state.plantId, false); } 
+            else if (event.state && event.state.view === 'tanamandex') { switchTab('tanamandex'); } 
+            else { switchTab('home'); }
+        });
+
+        // 6. MESIN KAMERA SCANNER (YANG MEMBUAT KAMERA MENYALA)
+        function onScanSuccess(decodedText) {
+            stopScanner();
+            try {
+                let id = decodedText.includes('?plant=') ? new URLSearchParams(decodedText.split('?')[1]).get('plant') : decodedText;
+                if (plantDatabase[id]) { rewardNewScan(id); showPlantDetail(id); } 
+                else { alert("QR Code tidak dikenali oleh sistem TangkalNaonAR."); }
+            } catch (e) { alert("Gagal membaca format QR Code."); }
+        }
+
+        scanBtn.addEventListener('click', () => {
+            if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+                alert("Kamera hanya bisa menyala jika website menggunakan HTTPS (contoh: di GitHub Pages)."); return;
+            }
+            scannerContainer.classList.remove('hidden');
+            if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
+            if (html5QrCode.isScanning) return;
+            html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: { width: 250, height: 250 } }, onScanSuccess)
+            .catch(err => { alert("Gagal mengaktifkan kamera: " + err); stopScanner(); });
+        });
+
+        function stopScanner() {
+            if (html5QrCode && html5QrCode.isScanning) { html5QrCode.stop().then(() => scannerContainer.classList.add('hidden')); } 
+            else { scannerContainer.classList.add('hidden'); }
+        }
+        closeBtn.addEventListener('click', stopScanner);
+    </script>
 </body>
 </html>
