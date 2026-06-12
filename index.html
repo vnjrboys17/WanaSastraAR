@@ -225,10 +225,9 @@
         <span class="px-2.5 py-1 bg-emerald-100 text-[#2A5C43] text-[10px] font-bold rounded-full uppercase tracking-wider" id="plant-family">Family</span>
         <h2 class="text-2xl font-bold text-[#1A3024] mt-2" id="plant-name">Nama Tanaman</h2>
         <p class="text-xs italic text-gray-400 font-medium" id="plant-latin">Nama Latin Sp.</p>
-        <div class="mt-4 border-t border-gray-100 pt-4">
-          <h4 class="text-xs font-bold text-gray-700 mb-1">Deskripsi Tanaman</h4>
-          <p class="text-xs text-gray-500 leading-relaxed" id="plant-desc">Memuat deskripsi...</p>
-        </div>
+        
+        <div class="mt-4 border-t border-gray-100 pt-4" id="plant-desc">
+          </div>
       </div>
     </main>
 
@@ -319,22 +318,41 @@
     let currentPlantId = ""; 
 
     // DATA MASTER
+    // PENGGUNAAN BACKTICK (`) MENGIZINKAN KITA MENGGUNAKAN HTML LANGSUNG DI DALAM JAVASCRIPT
     const plantDatabase = {
         "palm": {
             name: "Pohon Palem Raja",
             latin: "Roystonea regia",
             family: "Arecaceae",
-            desc: "Pohon palm adalah tanaman yang banyak ditemukan di daerah tropis. Ciri khasnya adalah batang yang tegak dengan daun yang tumbuh di bagian atas. Karena bentuknya yang indah, pohon palm sering digunakan sebagai penghias taman, jalan, dan area wisata. Selain mempercantik lingkungan, palm juga membantu menghasilkan oksigenn dan membuat suasana terasa lebih sejuk. 
-            manfaat: "Pohon palm bermanfaat untuk menjaga kualitas udara, memberikan keteduhan, dan memperindah lingkungan. Akarnya juga membsntu menjaga kestabilan tanah. Beberapa jenis palm bahkan menghasilkan buah yang dapat dimanfaatkan oleh manusia."
-            tahapan pertumbuhan: "Pertumbuhan pohon palm dimulai dari benih yang menyerap air dan mulai berkecambah. Dari benih tersebut muncul akar dan tunas muda yang kemudian berkembang menjadi bibit. Seiring waktu, batang tumbuh semakin tinggi, daun bertambah banyak, dan akar semakin kuat. Setelah mencapai fase dewasa, pohon palm memiliki batang yang kokoh dan tajuk yang rimbun. Pada tahap akhir, pohon menghasilkan bunga yang kemudian berkembang menjadi buah dan benih baru."
-            Fun Fact: "Tahukah kamu? Beberapa jenis pohon palm dapat hidup hingga puluhan bahkan ratusan tahun. Palm juga memiliki batang yang unik karena umumnya tumbuh lurus tanpa cabang, sehingga mudah dikenali dan menjadi salah satu tanaman hias paling populer di daerah tropis salah satunya adalah Indonesia."
+            desc: `
+              <h4 class="text-xs font-bold text-gray-700 mb-1">Deskripsi Tanaman</h4>
+              <p class="text-xs text-gray-500 leading-relaxed mb-4">Pohon palm adalah tanaman yang banyak ditemukan di daerah tropis. Ciri khasnya adalah batang yang tegak dengan daun yang tumbuh di bagian atas. Karena bentuknya yang indah, pohon palm sering digunakan sebagai penghias taman, jalan, dan area wisata. Selain mempercantik lingkungan, palm juga membantu menghasilkan oksigen dan membuat suasana terasa lebih sejuk.</p>
+              
+              <div class="mb-4">
+                  <h4 class="text-xs font-bold text-gray-700 mb-1">Manfaat Pohon Palm</h4>
+                  <p class="text-xs text-gray-500 leading-relaxed">Pohon palm bermanfaat untuk menjaga kualitas udara, memberikan keteduhan, dan memperindah lingkungan. Akarnya juga membantu menjaga kestabilan tanah. Beberapa jenis palm bahkan menghasilkan buah yang dapat dimanfaatkan oleh manusia.</p>
+              </div>
+
+              <div class="mb-4">
+                  <h4 class="text-xs font-bold text-gray-700 mb-1">Tahapan Pertumbuhan</h4>
+                  <p class="text-xs text-gray-500 leading-relaxed">Pertumbuhan pohon palm dimulai dari benih yang menyerap air dan mulai berkecambah. Dari benih tersebut muncul akar dan tunas muda yang kemudian berkembang menjadi bibit. Seiring waktu, batang tumbuh semakin tinggi, daun bertambah banyak, dan akar semakin kuat. Setelah mencapai fase dewasa, pohon palm memiliki batang yang kokoh dan tajuk yang rimbun. Pada tahap akhir, pohon menghasilkan bunga yang kemudian berkembang menjadi buah dan benih baru.</p>
+              </div>
+
+              <div class="mb-4">
+                  <h4 class="text-xs font-bold text-gray-700 mb-1">Fun Fact</h4>
+                  <p class="text-xs text-gray-500 leading-relaxed">Tahukah kamu? Beberapa jenis pohon palm dapat hidup hingga puluhan bahkan ratusan tahun. Palm juga memiliki batang yang unik karena umumnya tumbuh lurus tanpa cabang, sehingga mudah dikenali dan menjadi salah satu tanaman hias paling populer di daerah tropis salah satunya adalah Indonesia.</p>
+              </div>
+            `,
             models: { "1": "palm_tunas.glb", "2": "tropical_palm_tree.glb", "3": "palm_berbuah.glb" }
         },
         "mangga": { 
             name: "Pohon Mangga",
             latin: "Mangifera indica",
             family: "Anacardiaceae",
-            desc: "",
+            desc: `
+              <h4 class="text-xs font-bold text-gray-700 mb-1">Deskripsi Tanaman</h4>
+              <p class="text-xs text-gray-500 leading-relaxed mb-4">Pohon mangga adalah tanaman peneduh rindang yang sangat populer ditanam di pekarangan lingkungan tropis.</p>
+            `,
             models: { "1": "bibit_mangga.glb", "2": "mango_tree_fix.glb", "3": "mangga_berbuah.glb" }
         }
     };
@@ -476,7 +494,9 @@
         document.getElementById('plant-name').innerText = plant.name;
         document.getElementById('plant-latin').innerText = plant.latin;
         document.getElementById('plant-family').innerText = plant.family;
-        document.getElementById('plant-desc').innerText = plant.desc;
+        
+        // MENGGUNAKAN innerHTML AGAR FORMAT TEKS BOLD & PARAGRAF TERBACA
+        document.getElementById('plant-desc').innerHTML = plant.desc;
         
         const modelViewer = document.getElementById('plant-model');
         modelViewer.setAttribute('src', plant.models["2"]); 
