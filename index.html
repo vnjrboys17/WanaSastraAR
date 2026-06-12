@@ -31,7 +31,6 @@
 </head>
 <body class="flex justify-center items-center min-h-screen p-0 sm:p-4">
 
-  <!-- LOADING SCREEN -->
   <div id="loading-screen" class="fixed inset-0 z-[200] bg-[#2A5C43] flex flex-col items-center justify-center transition-opacity duration-700">
     <div class="animate-pulse flex flex-col items-center">
         <img src="LOGO_WANANSASTRA.png" alt="Logo" class="w-48 mb-4">
@@ -75,7 +74,6 @@
       </div>
     </header>
 
-    <!-- VIEW 1: BERANDA -->
     <main id="home-view" class="view-section flex-1 overflow-y-auto px-6 py-5 space-y-6 no-scrollbar z-10">
       
       <div class="relative rounded-2xl overflow-hidden shadow-md border border-emerald-950/10 group transition-transform duration-300 active:scale-98">
@@ -172,7 +170,6 @@
       </div>
     </main>
 
-    <!-- VIEW 2: TANAMANDEX -->
     <main id="tanamandex-view" class="view-section hidden flex-1 overflow-y-auto px-6 py-5 space-y-4 no-scrollbar z-10">
       <h3 class="text-base font-bold text-gray-800 tracking-wide">Katalog Lengkap TanamanDex</h3>
       <p class="text-xs text-gray-400 -mt-2">Temukan seluruh QR tanaman di lapangan untuk membuka ensiklopedia ini.</p>
@@ -192,7 +189,6 @@
       </div>
     </main>
 
-    <!-- VIEW 3: RANKING -->
     <main id="rank-view" class="view-section hidden flex-1 flex-col items-center justify-center px-6 text-center z-10 bg-[#FAFBFB]">
       <div class="w-32 h-32 bg-emerald-100 rounded-full flex items-center justify-center mb-6">
           <span class="material-symbols-outlined text-6xl text-emerald-700 animate-bounce flex items-center justify-center">rocket_launch</span>
@@ -207,7 +203,6 @@
       </button>
     </main>
 
-    <!-- VIEW 4: DETAIL AR -->
     <main id="detail-view" class="view-section hidden flex-1 overflow-y-auto pb-8 flex flex-col z-10 bg-white">
       <div class="w-full h-72 bg-gradient-to-b from-emerald-50 to-white relative flex items-center justify-center">
         <model-viewer id="plant-model" src="" ar ar-modes="webxr scene-viewer quick-look" camera-controls poster="https://images.unsplash.com/photo-1545147986-a9d6f2103c59?w=300" shadow-intensity="1" class="w-full h-full">
@@ -235,7 +230,6 @@
       </div>
     </main>
 
-    <!-- VIEW 5: KUIS TRIVIA -->
     <main id="quiz-view" class="view-section hidden flex-1 flex-col px-6 py-8 z-10 bg-[#FAFBFB] overflow-y-auto no-scrollbar">
       <div class="flex items-center justify-between mb-8">
         <button onclick="switchTab('home')" class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-700 hover:bg-gray-50 active:scale-95 transition-all">
@@ -261,7 +255,6 @@
       </div>
     </main>
 
-    <!-- VIEW 6: DAFTAR LEVEL (JENJANG PRESTASI) -->
     <main id="level-view" class="view-section hidden flex-1 flex-col px-6 py-6 z-10 bg-[#FAFBFB] overflow-y-auto no-scrollbar">
       <div class="flex items-center gap-4 mb-6">
         <button onclick="switchTab('home')" class="w-9 h-9 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-700 hover:bg-gray-50 active:scale-95 transition-all">
@@ -275,11 +268,10 @@
       <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative">
          <div class="absolute left-[37px] top-8 bottom-10 w-0.5 bg-gray-100 z-0"></div>
          <div id="level-list" class="relative z-10 flex flex-col gap-6">
-         </div>
+            </div>
       </div>
     </main>
 
-    <!-- MODAL SCANNER -->
     <div id="scanner-container" class="hidden fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center p-4 sm:absolute sm:rounded-3xl">
       <div class="w-full max-w-sm bg-white rounded-2xl overflow-hidden shadow-2xl p-4">
           <h3 class="text-sm font-bold text-gray-800 text-center mb-3">Arahkan Kamera ke QR Code</h3>
@@ -293,7 +285,6 @@
       </div>
     </div>
 
-    <!-- MODAL REWARD SCAN TANAMAN (z-index 100) -->
     <div id="reward-modal" class="hidden fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center p-4">
       <div class="bg-white rounded-[2rem] p-6 w-full max-w-[280px] text-center shadow-2xl transform scale-100 transition-transform">
         <div class="w-20 h-20 bg-gradient-to-tr from-emerald-100 to-teal-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner border border-emerald-100">
@@ -307,13 +298,12 @@
             +100 XP
           </p>
         </div>
-        <button onclick="document.getElementById('reward-modal').classList.add('hidden')" class="w-full py-3 bg-gradient-to-r from-[#2A5C43] to-[#1e4531] text-white font-bold rounded-xl shadow-lg hover:shadow-xl active:scale-95 transition-all text-xs tracking-wide uppercase">
+        <button onclick="closeScanRewardModal()" class="w-full py-3 bg-gradient-to-r from-[#2A5C43] to-[#1e4531] text-white font-bold rounded-xl shadow-lg hover:shadow-xl active:scale-95 transition-all text-xs tracking-wide uppercase">
           Lanjut Lihat AR
         </button>
       </div>
     </div>
 
-    <!-- MODAL KUIS REWARD (z-index 100) -->
     <div id="quiz-reward-modal" class="hidden fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center p-4">
       <div class="bg-white rounded-[2rem] p-6 w-full max-w-[280px] text-center shadow-2xl transform scale-100 transition-transform">
         <div class="w-20 h-20 bg-gradient-to-tr from-amber-100 to-orange-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner border border-amber-100">
@@ -333,37 +323,29 @@
       </div>
     </div>
 
-    <!-- MODAL NAIK LEVEL BARU (z-index 120 paling atas) -->
-    <div id="levelup-modal" class="hidden fixed inset-0 z-[120] bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-4">
-      <div class="bg-white rounded-[2rem] p-6 w-full max-w-[280px] text-center shadow-2xl transform scale-100 transition-transform relative overflow-hidden">
+    <div id="level-up-modal" class="hidden fixed inset-0 z-[110] bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center p-4">
+      <div class="bg-white rounded-[2rem] p-6 w-full max-w-[280px] text-center shadow-2xl transform scale-100 transition-transform">
         
-        <!-- Efek Cahaya / Sparkles -->
-        <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-amber-100/50 to-transparent"></div>
-        
-        <!-- Ikon Level Baru yang Memantul -->
-        <div class="relative w-24 h-24 bg-gradient-to-tr from-amber-100 to-orange-50 rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner border-4 border-amber-200">
-          <div class="absolute -top-1 -right-1 text-amber-400 animate-ping"><span class="material-symbols-outlined text-sm">auto_awesome</span></div>
-          <div class="absolute -bottom-1 -left-1 text-amber-400 animate-ping" style="animation-delay: 0.5s;"><span class="material-symbols-outlined text-sm">auto_awesome</span></div>
-          
-          <span id="levelup-icon" class="material-symbols-outlined text-6xl text-amber-500 animate-bounce">military_tech</span>
+        <div class="w-24 h-24 bg-gradient-to-tr from-amber-200 to-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner border-4 border-white shadow-lg">
+          <span class="material-symbols-outlined text-6xl text-amber-600 animate-bounce">military_tech</span>
         </div>
         
-        <h3 class="text-2xl font-extrabold text-gray-800 mb-1 tracking-wider">SELAMAT!</h3>
-        <p class="text-[11px] text-gray-500 mb-4 leading-relaxed px-2">Kamu telah naik level menjadi:</p>
+        <h3 class="text-2xl font-extrabold text-gray-800 mb-1">Selamat!</h3>
+        <p class="text-xs text-gray-500 mb-2 px-2">Anda telah naik level menjadi:</p>
         
-        <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200/60 rounded-xl py-3 mb-6 shadow-sm">
-          <p id="levelup-name" class="text-emerald-700 font-extrabold text-sm uppercase tracking-widest">
+        <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/60 rounded-xl py-3 mb-6 shadow-sm">
+          <p id="level-up-name" class="text-amber-800 font-extrabold text-sm uppercase tracking-widest">
             Nama Level
           </p>
         </div>
         
-        <button onclick="document.getElementById('levelup-modal').classList.add('hidden')" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl active:scale-95 transition-all text-xs tracking-wide uppercase">
+        <button onclick="closeLevelUpModal()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl active:scale-95 transition-all text-xs tracking-wide uppercase">
           Lanjutkan Petualangan
         </button>
+
       </div>
     </div>
 
-    <!-- NAVBAR BAWAH -->
     <nav id="bottom-nav" class="bg-white border-t border-gray-100 flex justify-around items-center py-3 px-6 sticky bottom-0 z-40 rounded-b-3xl">
       <button id="nav-home" onclick="switchTab('home')" class="nav-item flex flex-col items-center gap-0.5 text-emerald-600 font-bold transform scale-105">
         <span class="material-symbols-outlined text-2xl font-fill">home</span>
@@ -392,6 +374,12 @@
     
     let html5QrCode = null;
     let currentPlantId = ""; 
+    let pendingLevelUp = null; // Variabel untuk menyimpan status jika pemain naik level
+
+    // SISTEM RESET OTOMATIS: SELALU KEMBALI KE 0 SAAT DI REFRESH (F5)
+    sessionStorage.setItem('userXP', '0'); 
+    sessionStorage.setItem('userLevel', 'Ambassador Tunas');
+    sessionStorage.setItem('unlockedPlants', JSON.stringify([])); 
 
     // DATA MASTER
     const plantDatabase = {
@@ -438,7 +426,8 @@
         { name: "Pengamat Daun", minXP: 100, icon: "psychology" },
         { name: "Penjelajah Rimba", minXP: 200, icon: "explore" },
         { name: "Pawang Akar", minXP: 300, icon: "nature_people" },
-        { name: "Mahaguru Botani", minXP: 400, icon: "workspace_premium" }
+        { name: "Mahaguru Botani", minXP: 400, icon: "workspace_premium" },
+        { name: "Legenda Hijau", minXP: 500, icon: "diamond" }
     ];
 
     function calculateLevel(xp) {
@@ -452,35 +441,11 @@
         return currentLvl;
     }
 
-    // FUNGSI MENAMPILKAN POPUP NAIK LEVEL
-    function showLevelUpModal(levelName) {
-        const levelData = levelSystem.find(l => l.name === levelName);
-        if (levelData) {
-            document.getElementById('levelup-icon').innerText = levelData.icon;
-            document.getElementById('levelup-name').innerText = levelData.name;
-            document.getElementById('levelup-modal').classList.remove('hidden');
-        }
-    }
-
-    // LOCAL STORAGE INIT
-    if (!sessionStorage.getItem('userXP') || !sessionStorage.getItem('unlockedPlants')) {
-        sessionStorage.setItem('userXP', '0'); 
-        sessionStorage.setItem('userLevel', 'Ambassador Tunas');
-        sessionStorage.setItem('unlockedPlants', JSON.stringify([])); 
-    }
-
     // FUNGSI UPDATE UI GAMIFIKASI & LEVEL
     function syncGamificationUI() {
         const xp = parseInt(sessionStorage.getItem('userXP'));
-        const oldLevel = sessionStorage.getItem('userLevel');
         const calculatedLevelName = calculateLevel(xp);
-        
-        // Cek apakah terjadi Naik Level (Lewati jika baru pertama kali main / reload awal)
-        if (oldLevel && oldLevel !== calculatedLevelName && xp > 0) {
-            showLevelUpModal(calculatedLevelName);
-        }
-
-        sessionStorage.setItem('userLevel', calculatedLevelName); // Simpan level terbaru
+        sessionStorage.setItem('userLevel', calculatedLevelName); 
 
         const unlocked = JSON.parse(sessionStorage.getItem('unlockedPlants'));
 
@@ -495,7 +460,6 @@
         
         levelSystem.forEach((lvl, index) => {
             const isUnlocked = xp >= lvl.minXP;
-            
             const iconBg = isUnlocked ? "bg-emerald-100 text-emerald-600" : "bg-gray-100 text-gray-400";
             const textColor = isUnlocked ? "text-gray-800" : "text-gray-400";
             const descColor = isUnlocked ? "text-emerald-600 font-bold" : "text-gray-400";
@@ -576,12 +540,54 @@
         if (!unlocked.includes(plantId)) {
             unlocked.push(plantId);
             sessionStorage.setItem('unlockedPlants', JSON.stringify(unlocked));
-            let currentXP = parseInt(sessionStorage.getItem('userXP')) + 100;
-            if (currentXP >= 500) { currentXP = 500; sessionStorage.setItem('userLevel', 'Mahaguru Botani'); }
+            
+            let currentXP = parseInt(sessionStorage.getItem('userXP')) || 0;
+            let oldLevel = calculateLevel(currentXP); // Simpan level sebelum XP bertambah
+            
+            currentXP += 100;
+            if (currentXP > 500) currentXP = 500;
             sessionStorage.setItem('userXP', currentXP.toString());
             
-            document.getElementById('reward-modal').classList.remove('hidden');
             syncGamificationUI();
+            
+            let newLevel = calculateLevel(currentXP); // Cek level sesudah XP bertambah
+            if (oldLevel !== newLevel) {
+                pendingLevelUp = newLevel; // Tandai jika ada kenaikan level
+            }
+            
+            document.getElementById('reward-modal').classList.remove('hidden');
+        }
+    }
+
+    // PENUTUP MODAL XP SCAN
+    function closeScanRewardModal() {
+        document.getElementById('reward-modal').classList.add('hidden');
+        // Jika ada kenaikan level, munculkan modal selamat setelah XP ditutup
+        if (pendingLevelUp) {
+            document.getElementById('level-up-name').innerText = pendingLevelUp;
+            document.getElementById('level-up-modal').classList.remove('hidden');
+            pendingLevelUp = null;
+        }
+    }
+
+    // PENUTUP MODAL XP KUIS
+    function closeQuizRewardModal() {
+        document.getElementById('quiz-reward-modal').classList.add('hidden');
+        if (pendingLevelUp) {
+            document.getElementById('level-up-name').innerText = pendingLevelUp;
+            document.getElementById('level-up-modal').classList.remove('hidden');
+            pendingLevelUp = null;
+        } else {
+            switchTab('home');
+        }
+    }
+
+    // PENUTUP MODAL NAIK LEVEL
+    function closeLevelUpModal() {
+        document.getElementById('level-up-modal').classList.add('hidden');
+        // Jika sedang berada di halaman kuis, kita harus pulang ke beranda
+        if (!document.getElementById('quiz-view').classList.contains('hidden')) {
+            switchTab('home');
         }
     }
 
@@ -826,21 +832,23 @@
     function claimQuizReward(xp) {
         if (xp > 0) {
             let currentXP = parseInt(sessionStorage.getItem('userXP')) || 0;
+            let oldLevel = calculateLevel(currentXP); // Simpan level sebelum XP bertambah
+            
             currentXP += xp;
             if (currentXP > 500) currentXP = 500;
             sessionStorage.setItem('userXP', currentXP.toString());
             syncGamificationUI();
+            
+            let newLevel = calculateLevel(currentXP); // Cek level setelah XP bertambah
+            if (oldLevel !== newLevel) {
+                pendingLevelUp = newLevel; // Tandai jika ada kenaikan level
+            }
             
             document.getElementById('quiz-reward-text').innerHTML = `<span class="material-symbols-outlined text-base">star</span> +${xp} XP`;
             document.getElementById('quiz-reward-modal').classList.remove('hidden');
         } else {
             switchTab('home');
         }
-    }
-
-    function closeQuizRewardModal() {
-        document.getElementById('quiz-reward-modal').classList.add('hidden');
-        switchTab('home');
     }
   </script>
 </body>
